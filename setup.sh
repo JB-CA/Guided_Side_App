@@ -30,10 +30,12 @@ python3 -m venv $PWD/venv
 activate () {
     echo 'Starting virtual environment'
   . $PWD/venv/bin/activate
+    echo 'Gathering requirements with pip freeze'
+    pip3 freeze > $PWD/requirements.txt
+    cat $PWD/requirements.txt
     # install requirements
-    echo 'Checking requirements'
+    echo 'Checking installation of requirements'
     pip3 install -r $PWD/requirements.txt
-
 }
 
 activate
