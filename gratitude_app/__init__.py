@@ -1,21 +1,21 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+
 from os import environ
 
+db_user, db_pass, db_name, db_domain = (
+    environ.get(item) for item in ["DB_USER", "DB_PASS", "DB_NAME", "DB_DOMAIN"]
+)
 
-# db_user = environ.get("DB_USER")
-# db_pass = environ.get("DB_PASS")
-# db_name = environ.get("DB_NAME")
-# db_domain = environ.get("DB_DOMAIN")
-
-db_user, db_pass, db_name, db_domain = (environ.get(item) for item in ["DB_USER", "DB_PASS", "DB_NAME", "DB_DOMAIN"])
 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql+psycopg2://{db_user}:{db_pass}@{db_domain}/{db_name}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+app.config['SQLALCHEMY_ECHO'] = True
 
 db = SQLAlchemy(app)
+
 
 class Gratitude(db.Model):
     __tablename__ = "gratitudes"
@@ -78,6 +78,7 @@ def get_signup():
 def get_users():
     users = User.query.all()
     return jsonify([user.serialize for user in users])
+
 
 @app.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
