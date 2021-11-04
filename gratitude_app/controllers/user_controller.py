@@ -7,9 +7,9 @@ from schemas.gratitude_schema import gratitudes_schema
 
 users = Blueprint('users', __name__)
 
-# @users.route("/")
-# def hello_world():
-#     return "Hello World!\n"
+@users.route("/")
+def hello_world():
+    return "Hello World!\n"
 
 @users.route('/signup/')
 def get_signup():
