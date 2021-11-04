@@ -12,11 +12,3 @@ class User(db.Model):
         self.name = name
         self.email = email
         self.password = password
-
-    @property
-    def serialize(self):
-        return {
-            "user_id": self.user_id,
-            "name": self.name,
-            "email": self.email
-        }

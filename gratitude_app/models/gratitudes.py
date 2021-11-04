@@ -15,12 +15,3 @@ class Gratitude(db.Model):
             self.image = image
             self.text = text
 
-        @property
-        def serialize(self):
-            return {
-                'gratitude_id': self.gratitude_id,
-                'user_id': self.user_id,
-                'name': self.name,
-                'image': self.image,
-                'text': self.text
-            }
