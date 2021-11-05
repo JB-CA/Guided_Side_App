@@ -2,7 +2,6 @@ from os import environ
 
 class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS=False
-    SQLALCHEMY_ECHO = True
 
     @property
     def SQLALCHEMY_DATABASE_URI(self):
@@ -23,6 +22,7 @@ class Config(object):
         return f"postgresql+psycopg2://{uri_dict['DB_USER']}:{uri_dict['DB_PASS']}@{uri_dict['DB_DOMAIN']}/{uri_dict['DB_NAME']}"
 
 class DevelopmentConfig(Config):
+    SQLALCHEMY_ECHO = True
     DEBUG = True
 
 class ProductionConfig(Config):
