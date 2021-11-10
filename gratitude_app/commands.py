@@ -23,7 +23,7 @@ def seed_db():
     from faker import Faker
     fake = Faker()
 
-    for i in range(100):
+    for i in range(5):
         user = User(
             name = fake.name(),
             email = fake.email(),
@@ -38,7 +38,7 @@ def seed_db():
 
     for user in users:
         # get random number of gratitudes
-        num_gratitudes = fake.random_int(min=1, max=30)
+        num_gratitudes = fake.random_int(min=1, max=3)
         for i in range(num_gratitudes):
             gratitude = Gratitude(
                 user_id = user.id,
@@ -60,7 +60,7 @@ def reset_db():
     from faker import Faker
     fake = Faker()
 
-    for i in range(100):
+    for i in range(5):
         user = User(
             name = fake.name(),
             email = fake.email(),
@@ -75,7 +75,7 @@ def reset_db():
 
     for user in users:
         # get random number of gratitudes
-        num_gratitudes = fake.random_int(min=1, max=30)
+        num_gratitudes = fake.random_int(min=1, max=3)
         for i in range(num_gratitudes):
             gratitude = Gratitude(
                 name = fake.name(),

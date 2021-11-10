@@ -3,8 +3,11 @@
 # Set Current Directory
 PWD=`pwd`
 
+# Change to directory where the tests are located
 cd *_app
 
-python -m unittest discover -s tests -v
+# Run tests
+python3 -m unittest discover -s tests -v
 
+# Change back to original directory
 cd $PWD
