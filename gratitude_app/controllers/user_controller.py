@@ -28,11 +28,7 @@ def get_user(user_id):
 
 @users.route('/signup/', methods=['POST'])
 def create_user():
-    # data = request.get_json()
-    # name = data['name']
-    # email = data['email']
-    # password = data['password']
-    # new_user = User(name, email, password)
+
     new_user = user_schema.load(request.get_json())
     db.session.add(new_user)
     db.session.commit()
