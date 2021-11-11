@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template
 from main import db
 from models.users import User
 from models.gratitudes import Gratitude
@@ -9,7 +9,11 @@ users = Blueprint('users', __name__)
 
 @users.route("/")
 def hello_world():
-    return "Hello World!\n"
+    data = {
+        "page_title": "Hello World",
+    }
+    return render_template("base.html", page_data=data)
+    # return "Hello World!\n"
 
 @users.route('/signup/')
 def get_signup():
@@ -18,7 +22,16 @@ def get_signup():
 @users.route('/users/', methods=['GET'])
 def get_users():
     users = User.query.all()
-    return jsonify(users_schema.dump(users))
+    data = {
+        "page_title": "All Users",
+        "users": users_schema.dump(users)
+    }
+    return render_template("user_index.html", page_data=data)
+
+# @users.route('/users/', methods=['GET'])
+# def get_users():
+#     users = User.query.all()
+#     return jsonify(users_schema.dump(users))
 
 
 @users.route('/users/<int:user_id>', methods=['GET'])
