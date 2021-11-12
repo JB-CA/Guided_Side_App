@@ -1,5 +1,5 @@
 import unittest
-
+from urllib.parse import urlparse
 from werkzeug.wrappers.response import Response
 from main import create_app
 from dotenv import load_dotenv
@@ -20,7 +20,7 @@ class TestUsers(unittest.TestCase):
         response = self.client.get("/users/")
         data = response.get_json()
         self.assertEqual(response.status_code, 200)
-        self.assertIsInstance(data, list)
+        self.assertIn(b'<h1>All Users</h1>', response.data)
 
     def test_user_can_be_read_by_id(self):
         response = self.client.get("/users/1")
@@ -35,9 +35,12 @@ class TestUsers(unittest.TestCase):
         self.assertEqual(data, None)
 
     def test_user_can_be_created(self):
-        response = self.client.post("/signup/", json={"name": "test", "email": "123@email.com", "password": "1234567890"})
-        self.assertEqual(response.status_code, 201) 
-    
+        response = self.client.post("/signup/", data={"name": "test", "email": "123@email.com", "password": "1234567890"})
+        self.assertEqual(response.status_code, 302)
+        # Redirect to /users/
+        # Code from https://newbedev.com/flask-unit-testing-getting-the-response-s-redirect-location
+        self.assertEqual(urlparse(response.location).path, "/users/")
+
     def test_user_cannot_be_created_with_missing_password_field(self):
         response = self.client.post("/signup/", json={"name": "test", "email": "123@email.com"})
         self.assertEqual(response.status_code, 400)
