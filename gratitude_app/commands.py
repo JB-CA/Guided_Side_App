@@ -41,7 +41,7 @@ def seed_db():
         num_gratitudes = fake.random_int(min=1, max=3)
         for i in range(num_gratitudes):
             gratitude = Gratitude(
-                user_id = user.id,
+                user_id = user.user_id,
                 name = fake.name(),
                 text = fake.sentence(),
                 image = fake.url()
