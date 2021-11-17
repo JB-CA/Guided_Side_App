@@ -27,7 +27,7 @@ def home():
 
 # Sign up
 @users.route('/signup/', methods=['GET', 'POST'])
-def get_signup():
+def signup():
     data = {
         "page_title": "Sign Up"
     }
@@ -53,13 +53,13 @@ def login():
         user = User.query.filter_by(email=request.form['email']).first()
         if user and user.check_password(request.form['password']):
             login_user(user)
-            return redirect(url_for('users.get_user', user_id=user.user_id))
+            return redirect(url_for('users.get_user'))
         else:
             abort(401, "Login unsuccessful. Check username and password")
 
 # Log out
 @users.route('/logout/', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def logout():
     logout_user()
     return redirect("/login/")
@@ -98,9 +98,22 @@ def edit_user():
         return redirect(url_for('users.get_user', user_id=current_user.user_id))
 
 
-# Show details of a single user
+# Show details of current user
+@users.route('/user/', methods=['GET'])
+@login_required
+def get_user():
+    user = User.query.get_or_404(current_user.user_id)
+    gratitudes = Gratitude.query.where(Gratitude.user_id == current_user.user_id)
+    data = {
+        "page_title": user.name,
+        "user": user_schema.dump(user),
+        "gratitudes": gratitudes_schema.dump(gratitudes)
+    }
+    return render_template("user.html", page_data=data)
+
+# Show details of a specific user
 @users.route('/users/<int:user_id>', methods=['GET'])
-def get_user(user_id):
+def get_user_details(user_id):
     user = User.query.get_or_404(user_id)
     gratitudes = Gratitude.query.where(Gratitude.user_id == user_id)
     data = {
