@@ -43,7 +43,7 @@ def get_signup():
 
 # Log in
 @users.route('/login/', methods=['GET', 'POST'])
-def get_login():
+def login():
     data = {
         "page_title": "Log In",
     }
