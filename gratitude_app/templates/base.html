@@ -99,6 +99,12 @@
         {% set login_active = "" %}
     {% endif %}
 
+    {% if page_data.page_title == current_user.name %}
+        {% set user_active = "active" %}
+    {% else %}
+        {% set user_active = "" %}
+    {% endif %}
+
     <body class="d-flex h-100 text-center text-white bg-dark">
         <div class="cover-container d-flex w-100 p-3 mx-auto flex-column">
         <header class="mb-5">
@@ -107,7 +113,7 @@
                 <a class="nav-link {{ home_active }}" href="/">Home</a>
                 {% if current_user.is_authenticated %}
                     <a class="nav-link {{ users_active }}" href="/users/">Users</a>
-                    <a class="nav-link" href="/users/{{ current_user.user_id }}"> {{ current_user.first_name }} </a>
+                    <a class="nav-link {{ user_active }}" href="/users/{{ current_user.user_id }}"> {{ current_user.first_name }} </a>
                     <a class="nav-link" href="/logout/">Logout</a>
                 {% else %}
                     <a class="nav-link {{ signup_active }}" href="/signup/">Sign Up</a>
