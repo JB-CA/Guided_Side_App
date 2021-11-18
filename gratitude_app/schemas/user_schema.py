@@ -12,6 +12,7 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     name = auto_field(required=True, validate=[Length(min=2, max=50), ContainsNoneOf(string.punctuation)])
     email = auto_field(required=True, validate=Email())
     password = Method(required=True, load_only=True, deserialize="load_password")
+    mood = auto_field(required=False, validate=[Length(min=1, max=1)])
 
     def load_password(self, value):
         if len(value) > 6:
