@@ -9,6 +9,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
     mood = db.Column(db.String(1), nullable=False, default="😀")
+    # birthday = db.Column(db.Date, nullable=True, default="01-01-2001")
 
     gratitudes = db.relationship("Gratitude", backref="users", cascade="all, delete-orphan")
 

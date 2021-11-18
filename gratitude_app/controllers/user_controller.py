@@ -86,7 +86,9 @@ def edit_user():
 
     else:
         user = User.query.filter_by(user_id=current_user.user_id)
+        # print(request.form)
         data = user_update_schema.dump(request.form)
+        # print(data)
         errors = user_update_schema.validate(data)
 
         if errors:
@@ -109,6 +111,7 @@ def get_user():
         "user": user_schema.dump(user),
         "gratitudes": gratitudes_schema.dump(gratitudes)
     }
+    print(data)
     return render_template("user.html", page_data=data)
 
 # Show details of a specific user
