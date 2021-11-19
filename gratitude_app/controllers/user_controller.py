@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, render_template, redirect, url_for, abort, session
+from flask import Blueprint, jsonify, request, render_template, redirect, url_for, abort, current_app
 from main import db, lm
 from models.users import User
 from models.gratitudes import Gratitude
@@ -6,6 +6,7 @@ from schemas.user_schema import user_schema, users_schema, user_update_schema
 from schemas.gratitude_schema import gratitude_schema, gratitudes_schema
 from flask_login import login_user, logout_user, login_required, current_user
 from marshmallow import ValidationError
+import boto3
 
 @lm.user_loader
 def load_user(user):
@@ -106,10 +107,23 @@ def edit_user():
 def get_user():
     user = User.query.get_or_404(current_user.user_id)
     gratitudes = Gratitude.query.where(Gratitude.user_id == current_user.user_id)
+
+    s3_client=boto3.client("s3")
+    bucket_name=current_app.config["AWS_S3_BUCKET"]
+    image_url = s3_client.generate_presigned_url(
+        'get_object',
+        Params={
+            "Bucket": bucket_name,
+            "Key": user.image_filename
+        },
+        ExpiresIn=100
+    )
+
     data = {
         "page_title": user.name,
         "user": user_schema.dump(user),
-        "gratitudes": gratitudes_schema.dump(gratitudes)
+        "gratitudes": gratitudes_schema.dump(gratitudes),
+        "image": image_url
     }
     print(data)
     return render_template("user.html", page_data=data)

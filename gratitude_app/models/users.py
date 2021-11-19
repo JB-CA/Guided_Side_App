@@ -20,6 +20,9 @@ class User(UserMixin, db.Model):
     def first_name(self):
         return self.name.split(" ")[0]
 
+    @property
+    def image_filename(self):
+        return f"user_images/{self.user_id}.png"
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
