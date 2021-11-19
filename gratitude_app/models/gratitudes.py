@@ -9,9 +9,9 @@ class Gratitude(db.Model):
         image = db.Column(db.String(500))
         text = db.Column(db.String(500))
 
-        def __init__(self, name, user_id, image=None, text=None):
-            self.name = name
-            self.user_id = user_id
-            self.image = image
-            self.text = text
+        # def __init__(self, name, user_id, image=None, text=None):
+        #     self.name = name
+        #     self.user_id = user_id
+        #     self.image = image
+        #     self.text = text
 

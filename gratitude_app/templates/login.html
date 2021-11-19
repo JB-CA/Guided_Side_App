@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+    
+    <!-- New User Form -->
+    <div class="container">
+        <form class="form-horizontal" action="/login/" method="POST">
+            <div class="row">
+                <div class="mb-4">
+                    <h2>Login</h2>
+                </div>
+            </div>
+            <div class="form-group row mb-4 text-start">
+                <label class="control-label col-sm-2" for="email">Email:</label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email">
+                </div>
+            </div>
+            <div class="form-group row mb-4 text-start">
+                <label class="col-form-label col-sm-2" for="password">Password:</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
+                </div>
+            </div>
+            <!-- <div class="form-group">
+                <label for="password_confirm">Confirm Password:</label>
+                <input type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="Confirm Password">
+            </div> -->
+            <!-- forgot password -->
+            <div class="form-group row mb-4 text-start">
+                <div class="col-sm-10">
+                    <a href="/forgot_password/">Forgot Password?</a>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <button class="btn btn-primary" type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

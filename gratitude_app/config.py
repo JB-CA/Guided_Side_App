@@ -2,6 +2,7 @@ from os import environ
 
 class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS=False
+    SECRET_KEY = environ.get('SECRET_KEY')
 
     @property
     def SQLALCHEMY_DATABASE_URI(self):
