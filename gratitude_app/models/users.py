@@ -22,7 +22,7 @@ class User(UserMixin, db.Model):
 
     @property
     def image_filename(self):
-        return f"user_images/{self.user_id}.png"
+        return f"{self.user_id}_{self.first_name}.png"
 
     def check_password(self, password):
         return check_password_hash(self.password, password)

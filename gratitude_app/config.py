@@ -43,6 +43,13 @@ class Config(object):
             return environ.get("AWS_S3_BUCKET")
         except ValueError:
             raise ValueError("AWS_S3_BUCKET is not set.")
+    
+    @property
+    def AWS_REGION(self):
+        try:
+            return environ.get("AWS_REGION")
+        except ValueError:
+            raise ValueError("AWS_REGION is not set.")
 
 class DevelopmentConfig(Config):
     SQLALCHEMY_ECHO = True

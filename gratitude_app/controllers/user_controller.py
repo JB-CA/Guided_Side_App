@@ -108,24 +108,26 @@ def get_user():
     user = User.query.get_or_404(current_user.user_id)
     gratitudes = Gratitude.query.where(Gratitude.user_id == current_user.user_id)
 
-    s3_client=boto3.client("s3")
+    # s3_client=boto3.client("s3")
     bucket_name=current_app.config["AWS_S3_BUCKET"]
-    image_url = s3_client.generate_presigned_url(
-        'get_object',
-        Params={
-            "Bucket": bucket_name,
-            "Key": user.image_filename
-        },
-        ExpiresIn=100
-    )
-
+    region=current_app.config["AWS_REGION"]
+    # image_url = s3_client.generate_presigned_url(
+    #     'get_object',
+    #     Params={
+    #         "Bucket": bucket_name,
+    #         "Key": user.image_filename
+    #     },
+    #     ExpiresIn=3600*24
+    # )
+    image_url = f"https://{bucket_name}.s3.{region}.amazonaws.com/user_images/{user.image_filename}"
+    # https://gratitude-side-app-ccc.s3.ap-southeast-2.amazonaws.com/user_images/6.png
     data = {
         "page_title": user.name,
         "user": user_schema.dump(user),
         "gratitudes": gratitudes_schema.dump(gratitudes),
         "image": image_url
     }
-    print(data)
+    # print(data)
     return render_template("user.html", page_data=data)
 
 # Show details of a specific user
