@@ -10,6 +10,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(200), nullable=False)
     mood = db.Column(db.String(1), nullable=False, server_default="😀")
     # birthday = db.Column(db.Date, nullable=True, default="01-01-2001")
+    has_image = db.Column(db.Boolean())
 
     gratitudes = db.relationship("Gratitude", backref="users", cascade="all, delete-orphan")
 
@@ -20,6 +21,9 @@ class User(UserMixin, db.Model):
     def first_name(self):
         return self.name.split(" ")[0]
 
+    @property
+    def image_filename(self):
+        return f"{self.user_id}_{self.first_name}.png"
 
     def check_password(self, password):
         return check_password_hash(self.password, password)

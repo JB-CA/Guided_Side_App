@@ -13,6 +13,11 @@
             {% for user in page_data.users %}
                 <tr>
                     <td><a class="text-white" href="/users/{{ user.user_id }}">{{ user.user_id }}</a></td>
+                    {% if user.has_image %}
+                        <td><img src="https://gratitude-side-app-ccc.s3.ap-southeast-2.amazonaws.com/user_images/{{ user.user_id }}_{{ user.name.split(' ')[0] }}.png" style="height: 48px; width: 48px; border-radius: 50%;"></td>
+                    {% else %}
+                        <td><img src="https://gratitude-side-app-ccc.s3.ap-southeast-2.amazonaws.com/user_images/default.png" style="height: 48px; width: 48px; border-radius: 50%;"></td>
+                    {% endif %}
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
                     <!-- TODO:  -->

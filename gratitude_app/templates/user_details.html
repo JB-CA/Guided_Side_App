@@ -37,6 +37,11 @@
                 <button class="btn btn-primary" type="submit">Update Account</button>
             </div>
         </form>
+        <h3>Update Image:</h3>
+        <form action="/users/{{ current_user.user_id }}/image/" method="POST" enctype="multipart/form-data">
+            <input type="file" name="image" accept="image/png">
+            <input type="submit">
+        </form>
     </div>
 
 {% endblock %}

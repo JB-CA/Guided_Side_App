@@ -3,6 +3,7 @@ from os import environ
 class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS=False
     SECRET_KEY = environ.get('SECRET_KEY')
+    MAX_CONTENT_LENGTH = 1 * 1024 * 1024
 
     @property
     def SQLALCHEMY_DATABASE_URI(self):
@@ -21,6 +22,34 @@ class Config(object):
                 raise ValueError(f"{key} is not set.")
 
         return f"postgresql+psycopg2://{uri_dict['DB_USER']}:{uri_dict['DB_PASS']}@{uri_dict['DB_DOMAIN']}/{uri_dict['DB_NAME']}"
+
+    @property
+    def AWS_ACCESS_KEY_ID(self):
+        try:
+            return environ.get("AWS_ACCESS_KEY_ID")
+        except ValueError:
+            raise ValueError("AWS_ACCESS_KEY_ID is not set.")
+    
+    @property
+    def AWS_SECRET_ACCESS_KEY(self):
+        try:
+            return environ.get("AWS_SECRET_ACCESS_KEY")
+        except ValueError:
+            raise ValueError("AWS_SECRET_ACCESS_KEY is not set.")
+    
+    @property
+    def AWS_S3_BUCKET(self):
+        try:
+            return environ.get("AWS_S3_BUCKET")
+        except ValueError:
+            raise ValueError("AWS_S3_BUCKET is not set.")
+    
+    @property
+    def AWS_REGION(self):
+        try:
+            return environ.get("AWS_REGION")
+        except ValueError:
+            raise ValueError("AWS_REGION is not set.")
 
 class DevelopmentConfig(Config):
     SQLALCHEMY_ECHO = True
