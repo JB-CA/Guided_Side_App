@@ -1,11 +1,14 @@
 from flask import Blueprint, request, redirect, abort, url_for, current_app
 from pathlib import Path
+from main import db, lm
+from flask_login import login_required, current_user
 from models.users import User
 import boto3
 
 user_images = Blueprint('user_images', __name__)
 
 @user_images.route("/users/<int:user_id>/image/", methods=["POST"])
+@login_required
 def update_image(user_id):
     
     user = User.query.get_or_404(user_id)
@@ -25,7 +28,9 @@ def update_image(user_id):
             bucket.upload_fileobj(image, f"user_images/{user.image_filename}", ExtraArgs={"ContentType": "image/png", "ACL": "public-read"})
         # else:
         #     bucket.upload_fileobj(image, f"{user.image_filename}.jpg")
-
+        user = User.query.filter_by(user_id=current_user.user_id)
+        user.update({"has_image": True})
+        db.session.commit()
         return redirect(url_for("users.get_user", user_id=user_id))
 
     return abort(400, description="No image")

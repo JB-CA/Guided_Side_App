@@ -14,6 +14,7 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     password = Method(required=True, load_only=True, deserialize="load_password")
     # birthday = Date(required=False, validate=[Length(min=10, max=10)], format='%d-%m-%Y')
     mood = auto_field(required=False, validate=[Length(min=1, max=1)])
+    has_image = auto_field(required=False)
 
     def load_password(self, value):
         if len(value) > 6:

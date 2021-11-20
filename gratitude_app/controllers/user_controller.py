@@ -6,6 +6,7 @@ from schemas.user_schema import user_schema, users_schema, user_update_schema
 from schemas.gratitude_schema import gratitude_schema, gratitudes_schema
 from flask_login import login_user, logout_user, login_required, current_user
 from marshmallow import ValidationError
+from pathlib import Path
 import boto3
 
 @lm.user_loader
@@ -89,7 +90,7 @@ def edit_user():
         user = User.query.filter_by(user_id=current_user.user_id)
         # print(request.form)
         data = user_update_schema.dump(request.form)
-        # print(data)
+        print(data)
         errors = user_update_schema.validate(data)
 
         if errors:
@@ -108,18 +109,18 @@ def get_user():
     user = User.query.get_or_404(current_user.user_id)
     gratitudes = Gratitude.query.where(Gratitude.user_id == current_user.user_id)
 
-    # s3_client=boto3.client("s3")
+    s3_client=boto3.client("s3")
     bucket_name=current_app.config["AWS_S3_BUCKET"]
-    region=current_app.config["AWS_REGION"]
-    # image_url = s3_client.generate_presigned_url(
-    #     'get_object',
-    #     Params={
-    #         "Bucket": bucket_name,
-    #         "Key": user.image_filename
-    #     },
-    #     ExpiresIn=3600*24
-    # )
-    image_url = f"https://{bucket_name}.s3.{region}.amazonaws.com/user_images/{user.image_filename}"
+    # region=current_app.config["AWS_REGION"]
+    image_url = s3_client.generate_presigned_url(
+        'get_object',
+        Params={
+            "Bucket": bucket_name,
+            "Key": f"user_images/{user.image_filename}"
+        },
+        ExpiresIn=3600*24
+    )
+    # image_url = f"https://{bucket_name}.s3.{region}.amazonaws.com/user_images/{user.image_filename}"
     # https://gratitude-side-app-ccc.s3.ap-southeast-2.amazonaws.com/user_images/6.png
     data = {
         "page_title": user.name,
@@ -168,4 +169,34 @@ def get_user_gratitude(user_id, gratitude_id):
         return jsonify(result)
     else:
         return jsonify({"message": "There was an issue"})
+
+
+
+# @users.route("/users/<int:user_id>/image/", methods=["POST"])
+# @login_required
+# def update_image(user_id):
+    
+#     user = User.query.get_or_404(user_id)
+#     print("Printing user:-------------------------------------------------------------------------------------------------------------------------\n", user)
+#     if "image" in request.files:
+#         print(request.files["image"])
+#         image = request.files["image"]
+        
+#         if Path(image.filename).suffix == ".png" or Path(image.filename).suffix == ".jpg":
+#             bucket = boto3.resource("s3").Bucket(current_app.config["AWS_S3_BUCKET"])
+#         else:
+#             return abort(400, description="Invalid file type")
+        
+#         if Path(image.filename).suffix == ".png":
+#             print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+#             print(bucket)
+#             bucket.upload_fileobj(image, f"user_images/{user.image_filename}", ExtraArgs={"ContentType": "image/png", "ACL": "public-read"})
+#         # else:
+#         #     bucket.upload_fileobj(image, f"{user.image_filename}.jpg")
+#         user = User.query.filter_by(user_id=current_user.user_id)
+#         user.update({"has_image": True})
+#         db.session.commit()
+#         return redirect(url_for("users.get_user", user_id=user_id))
+
+#     return abort(400, description="No image")
 
